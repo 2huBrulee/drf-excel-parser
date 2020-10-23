@@ -247,7 +247,7 @@ const App = () => {
     fetch("/excel/save/", {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: data,
     })
@@ -262,7 +262,9 @@ const App = () => {
         {isDragActive ? (
           <p>Suelte el archivo aqui ...</p>
         ) : (
-          <p>Haga clic o arraste un archivo hacia aqui para llenar la tabla ...</p>
+          <p>
+            Haga clic o arraste un archivo hacia aqui para llenar la tabla ...
+          </p>
         )}
       </div>
       <br />
@@ -290,20 +292,25 @@ const App = () => {
         rowsText="filas"
       />
       <br />
-      <div className="float-right p-2">
-        <div className="p-2">
+      <div className="float-right">
+        <div className="p-2 d-flex flex-row">
           {saving && (
-            <div className="spinner-grow" role="status">
+            <div className="spinner-grow my-auto mx-3" role="status">
               <span className="sr-only">Loading...</span>
             </div>
           )}
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={handleSaveData}
+          <div
+            className="my-auto"
           >
-            Guardar Datos
-          </button>
+            <button
+              type="button"
+              className="btn btn-success"
+              disabled={data.length === 0 || saving}
+              onClick={handleSaveData}
+            >
+              Guardar Datos
+            </button>
+          </div>
         </div>
       </div>
     </div>
