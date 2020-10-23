@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { useDropzone } from "react-dropzone";
-
-// Import React Table
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
@@ -211,8 +211,29 @@ const App = () => {
       method: "POST",
       body,
     })
-      .then((response) => response.json())
-      .then((response) => setData(response.data));
+      .then((response) => {
+        if (response.status > 299 || response.status < 200) throw new Error('status code');
+        return response.json();
+      })
+      .then((response) => {
+        if (!response.error) {
+          toast.success("Excel cargado correctamente", {
+            hideProgressBar: true,
+          });
+
+          setData(response.data);
+        } else {
+          toast.error("Ocurrió un error al cargar el excel", {
+            hideProgressBar: true,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ocurrió un error al cargar el excel", {
+          hideProgressBar: true,
+        });
+      });
   }, []);
 
   const {
@@ -251,8 +272,23 @@ const App = () => {
       },
       body: data,
     })
-      .then(() => setSaving(false))
-      .catch(() => setSaving(false));
+      .then((response) => {
+        if (response.status > 299 || response.status < 200) throw new Error('status code');
+        return response.json();
+      })
+      .then(() => {
+        toast.success("Datos almacenados correctamente", {
+          hideProgressBar: true,
+        });
+        setSaving(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ocurrió un error a la hora de guardar datos", {
+          hideProgressBar: true,
+        });
+        setSaving(false);
+      });
   };
 
   return (
@@ -299,9 +335,7 @@ const App = () => {
               <span className="sr-only">Loading...</span>
             </div>
           )}
-          <div
-            className="my-auto"
-          >
+          <div className="my-auto">
             <button
               type="button"
               className="btn btn-success"
@@ -313,6 +347,7 @@ const App = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
