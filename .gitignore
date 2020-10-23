@@ -1,6 +1,7 @@
 env
 .env
 .vscode
+static
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/django
@@ -155,3 +156,4 @@ dmypy.json
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+node_modules

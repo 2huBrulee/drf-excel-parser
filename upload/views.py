@@ -2,7 +2,10 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.views import View
 import pandas as pd
+from django.shortcuts import render
+
 import json
 
 bd_categories = [
@@ -73,7 +76,7 @@ bd_categories = [
 ]
 
 sheet1_columns = ['Product ID', 'Name', 'Headline', 'Description', 'ABV', 'image', 'brand', 'categories']
-sheet2_columns = ['ProductID', 'SKU', 'EAN', 'fabrique code', 'unit', 'measure']
+sheet2_columns = ['Product ID', 'SKU', 'EAN', 'fabrique code', 'unit', 'measure']
 
 def validateCategoriesInRow(row, available_categories):
     categories = row['categories'].split(',')
@@ -185,3 +188,8 @@ class ExcelViewSet(viewsets.GenericViewSet):
     def save(self, request):
         print(request.data)
         return Response({'data': 'saved'})
+
+class TableView(View):
+    template_name = 'table/index.html'
+    def get(self, request):
+        return render(request, self.template_name)
